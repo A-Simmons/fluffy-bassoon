@@ -8,6 +8,11 @@
 
 /* Begin PBXBuildFile section */
 		4F79DB6421AE1CD800C5C7C1 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4F79DB6321AE1CD800C5C7C1 /* main.cpp */; };
+		4F79DB6C21AE1CEF00C5C7C1 /* util.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4F79DB6A21AE1CEF00C5C7C1 /* util.cpp */; };
+		4F79DB7321AE1D3D00C5C7C1 /* database_sqlite3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4F79DB7121AE1D3D00C5C7C1 /* database_sqlite3.cpp */; };
+		4F79DB7921AE1D8C00C5C7C1 /* spacetrackquery.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4F79DB7721AE1D8C00C5C7C1 /* spacetrackquery.cpp */; };
+		4F79DB7C21AE1DA900C5C7C1 /* spacetrack.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4F79DB7A21AE1DA900C5C7C1 /* spacetrack.cpp */; };
+		4F79DB7F21AE1E0900C5C7C1 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F79DB7E21AE1E0900C5C7C1 /* libsqlite3.tbd */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -25,6 +30,17 @@
 /* Begin PBXFileReference section */
 		4F79DB6021AE1CD800C5C7C1 /* Satellites_3 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Satellites_3; sourceTree = BUILT_PRODUCTS_DIR; };
 		4F79DB6321AE1CD800C5C7C1 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		4F79DB6A21AE1CEF00C5C7C1 /* util.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = util.cpp; sourceTree = "<group>"; };
+		4F79DB6B21AE1CEF00C5C7C1 /* util.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = util.hpp; sourceTree = "<group>"; };
+		4F79DB7121AE1D3D00C5C7C1 /* database_sqlite3.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = database_sqlite3.cpp; sourceTree = "<group>"; };
+		4F79DB7221AE1D3D00C5C7C1 /* database_sqlite3.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = database_sqlite3.hpp; sourceTree = "<group>"; };
+		4F79DB7521AE1D6800C5C7C1 /* json.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = json.h; sourceTree = "<group>"; };
+		4F79DB7721AE1D8C00C5C7C1 /* spacetrackquery.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = spacetrackquery.cpp; sourceTree = "<group>"; };
+		4F79DB7821AE1D8C00C5C7C1 /* spacetrackquery.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = spacetrackquery.hpp; sourceTree = "<group>"; };
+		4F79DB7A21AE1DA900C5C7C1 /* spacetrack.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = spacetrack.cpp; sourceTree = "<group>"; };
+		4F79DB7B21AE1DA900C5C7C1 /* spacetrack.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = spacetrack.hpp; sourceTree = "<group>"; };
+		4F79DB7E21AE1E0900C5C7C1 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
+		4F79DB8021AE1E0F00C5C7C1 /* libsqlite3.0.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.0.tbd; path = usr/lib/libsqlite3.0.tbd; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -32,6 +48,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4F79DB7F21AE1E0900C5C7C1 /* libsqlite3.tbd in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -43,6 +60,7 @@
 			children = (
 				4F79DB6221AE1CD800C5C7C1 /* Satellites_3 */,
 				4F79DB6121AE1CD800C5C7C1 /* Products */,
+				4F79DB7D21AE1E0900C5C7C1 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -57,9 +75,51 @@
 		4F79DB6221AE1CD800C5C7C1 /* Satellites_3 */ = {
 			isa = PBXGroup;
 			children = (
+				4F79DB7621AE1D7300C5C7C1 /* SpaceTrack */,
+				4F79DB7421AE1D4F00C5C7C1 /* nlohmann */,
+				4F79DB6D21AE1D0D00C5C7C1 /* Database */,
 				4F79DB6321AE1CD800C5C7C1 /* main.cpp */,
+				4F79DB6A21AE1CEF00C5C7C1 /* util.cpp */,
+				4F79DB6B21AE1CEF00C5C7C1 /* util.hpp */,
 			);
 			path = Satellites_3;
+			sourceTree = "<group>";
+		};
+		4F79DB6D21AE1D0D00C5C7C1 /* Database */ = {
+			isa = PBXGroup;
+			children = (
+				4F79DB7121AE1D3D00C5C7C1 /* database_sqlite3.cpp */,
+				4F79DB7221AE1D3D00C5C7C1 /* database_sqlite3.hpp */,
+			);
+			path = Database;
+			sourceTree = "<group>";
+		};
+		4F79DB7421AE1D4F00C5C7C1 /* nlohmann */ = {
+			isa = PBXGroup;
+			children = (
+				4F79DB7521AE1D6800C5C7C1 /* json.h */,
+			);
+			path = nlohmann;
+			sourceTree = "<group>";
+		};
+		4F79DB7621AE1D7300C5C7C1 /* SpaceTrack */ = {
+			isa = PBXGroup;
+			children = (
+				4F79DB7721AE1D8C00C5C7C1 /* spacetrackquery.cpp */,
+				4F79DB7821AE1D8C00C5C7C1 /* spacetrackquery.hpp */,
+				4F79DB7A21AE1DA900C5C7C1 /* spacetrack.cpp */,
+				4F79DB7B21AE1DA900C5C7C1 /* spacetrack.hpp */,
+			);
+			path = SpaceTrack;
+			sourceTree = "<group>";
+		};
+		4F79DB7D21AE1E0900C5C7C1 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				4F79DB8021AE1E0F00C5C7C1 /* libsqlite3.0.tbd */,
+				4F79DB7E21AE1E0900C5C7C1 /* libsqlite3.tbd */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -118,7 +178,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4F79DB7C21AE1DA900C5C7C1 /* spacetrack.cpp in Sources */,
+				4F79DB7921AE1D8C00C5C7C1 /* spacetrackquery.cpp in Sources */,
 				4F79DB6421AE1CD800C5C7C1 /* main.cpp in Sources */,
+				4F79DB6C21AE1CEF00C5C7C1 /* util.cpp in Sources */,
+				4F79DB7321AE1D3D00C5C7C1 /* database_sqlite3.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -239,7 +303,10 @@
 		4F79DB6821AE1CD800C5C7C1 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
 				CODE_SIGN_STYLE = Automatic;
+				GCC_NO_COMMON_BLOCKS = NO;
+				OTHER_LDFLAGS = "-lcurl";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -247,7 +314,10 @@
 		4F79DB6921AE1CD800C5C7C1 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
 				CODE_SIGN_STYLE = Automatic;
+				GCC_NO_COMMON_BLOCKS = NO;
+				OTHER_LDFLAGS = "-lcurl";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
