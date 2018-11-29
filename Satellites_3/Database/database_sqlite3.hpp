@@ -88,7 +88,7 @@ private:
     char *zErrMsg = 0;
     int rc;
     char *sql;
-    bool checkSqlExec(string, string);
+    bool checkSqlExec();
     void openDatabase(const char *);
     void insertStatement(string);
     void selectStatement(char *);

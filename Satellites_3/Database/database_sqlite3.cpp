@@ -113,10 +113,15 @@ Database::~Database(void) {
 }
 
 void Database::openDatabase(const char *dbname) {
+    std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
     this->rc = sqlite3_open(dbname, &(this->db));
-    if (!(this->checkSqlExec("Opened database successfully", "Can't open database"))) {
+    if (!(this->checkSqlExec())) {
         exit(0);
     }
+    std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+    std::cout << "Opened Database = " << std::chrono::duration_cast<std::chrono::seconds> (end - begin).count() << "seconds" << std::endl;
+    
+
 }
 
 std::vector<std::vector<std::string> > * Database::selectStatement(string sqlStatement) {
@@ -153,21 +158,12 @@ void Database::createTable(PreparedTable* pTable) {
             sql.append(", ");
     }
     sql.append(" );");
-    cout << sql << endl;
     this->rc = sqlite3_exec(this->db, sql.c_str(), 0, 0, &(this->zErrMsg));
     
 }
 
-bool Database::checkSqlExec(string success, string failure) {
-    if( this->rc ) {
-        failure.append(" :%s\n");
-        fprintf(stderr, failure.c_str(), sqlite3_errmsg(db));
-        return(0);
-    } else {
-        success.append("\n");
-        fprintf(stderr, success.c_str());
-        return(1);
-    }
+bool Database::checkSqlExec() {
+    return !(this->rc);
 }
 
 void Database::iniitialiseSATCATTable(Table T) {
@@ -281,8 +277,6 @@ void Database::moveTleToTable() {
         sqlInsert.append(where);
         
         sqlDelete.append(where);
-        cout << sqlInsert << endl;
-        cout << sqlDelete << endl;
         
         sqlite3_prepare_v2(this->db, sqlInsert.c_str(), BUFFER_SIZE, &stmt, &tail);
         sqlite3_step(stmt);

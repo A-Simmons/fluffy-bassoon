@@ -14,6 +14,8 @@
 #include <iostream>
 #include <vector>
 #include <memory>
+
+#define StartDownloadDate = "2017-01-01";
 using json = nlohmann::json;
 //#include <filesystem>
 using namespace std;
@@ -90,26 +92,29 @@ namespace {
  #define InterestedSatCat "SATCAT_Example.csv"
  
  static void getTLEData(SpaceTrackConn &c) {
-     time_t timeNow;
-     time (&timeNow);
-     
-     struct tm tm;
      char startDate[100];
      char endDate[100];
-     strptime("2018 05 14", "%Y %m %d", &tm);
      
-     cout << (mktime(&tm) < timeNow) << endl;
-     while (mktime(&tm) < timeNow) {
-         strftime(startDate, sizeof(startDate), "%Y-%m-%d", &tm);
-         tm.tm_mday += 1;
-         mktime(&tm);
-         strftime(endDate, sizeof(endDate), "%Y-%m-%d", &tm);
+     // Download Date
+     struct tm dDate = {0};
+     strptime("2017-01-01", "%Y-%m-%dT", &dDate);
+     dDate.tm_isdst = 0;
+     long downloadDate = mktime(&dDate);
+     
+     // Current Date (to not exceed)
+     time_t timeNow;
+     time (&timeNow);
+
+     while (downloadDate < timeNow) {
+         strftime(startDate, sizeof(startDate), "%Y-%m-%d", &dDate);
+         dDate.tm_mday += 1;
+         mktime(&dDate);
+         downloadDate = mktime(&dDate);
+         strftime(endDate, sizeof(endDate), "%Y-%m-%d", &dDate);
          string start = string(startDate);
          string end = string(endDate);
          string path_file = "Historical_TLE_Data/test_";
          path_file.append(start);
-         path_file.append("--");
-         path_file.append(end);
          path_file.append(".csv");
          getHistoricalTLEData(&c, path_file, startDate, endDate);
      }
@@ -151,11 +156,8 @@ static void testSelectStatement(bool printResults, const std::string &sqlStateme
 
 int main(int argc, char *argv[])
 {
-    // Space Track Connection
-    
-     SpaceTrackConn c("h2807809@nwytg.net", "z5nfI0sgeHob3t0PZF2uP364inQe8", "https://www.space-track.org/ajaxauth/login");
-    
-
+    SpaceTrackConn c("h2807809@nwytg.net", "z5nfI0sgeHob3t0PZF2uP364inQe8", "https://www.space-track.org/ajaxauth/login");
+    getTLEData(c);
     
     //interestedSatellite(&c, InterestedSatCat);
     
