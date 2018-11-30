@@ -98,13 +98,21 @@ static void getSqlInsertStatement(char *sSQL, const std::string &tablename, cons
         values = "(@ROWID, @NCID, @OT, @INT, @EP, @EPMS, @TL0, @TL1, @TL2, @EDATE)";
     else if (type == TableTypes::SATCAT)
         values = "(@INTDES, @NCID, @OT, @SN, @COUNT, @LAUNCH, @SITE, @DECAY, @PERIOD, @INC, @APO, @PERI, @COM, @CC, @RCSV, @RCSS, @FILE, @LY, @LN, @LP, @CURR, @ON, @OID)";
+    else if (type == TableTypes::FILES)
+        values = "(@FNAME, @PATH, @FTYPE, @DTYPE, @DATE)";
     sprintf(sSQL, "INSERT INTO %s VALUES %s", tablename.c_str(), values.c_str());
 }
 
-Database::Database(const char *dbname) {
+Database::Database(const char *dbname, bool dropTables) {
     this->openDatabase(dbname);
+    if (dropTables) {
+        sqlite3_exec(this->db, "DROP TABLE IF EXISTS SATCAT;", NULL, NULL, NULL);
+        sqlite3_exec(this->db, "DROP TABLE IF EXISTS TLE;", NULL, NULL, NULL);
+        sqlite3_exec(this->db, "DROP TABLE IF EXISTS FILES;", NULL, NULL, NULL);
+    }
     this->iniitialiseSATCATTable(this->T.SATCAT);
     this->initialiseTLETable(this->T.TLE);
+    this->initialiseDownloadsTable(this->T.FILES);
     
 }
 
@@ -211,6 +219,24 @@ void Database::initialiseTLETable(Table T) {
     this->createTable(&pTable);
 }
 
+void Database::initialiseDownloadsTable(Table T) {
+    PreparedTable pTable;
+    pTable.setTableName(T.name);
+    pTable.appendColumn("FILENAME", "TEXT");
+    pTable.appendColumn("PATH", "TEXT");
+    pTable.appendColumn("FILETYPE", "TEXT");
+    pTable.appendColumn("DATATYPE", "DATETIME");
+    pTable.appendColumn("DATE", "DATE");
+    this->createTable(&pTable);
+}
+
+void Database::insertFromString(struct FileInsertStatement str, struct Table tab) {
+    char * sErrMsg = 0;
+    char sSQL [BUFFER_SIZE] = "\0";
+    sprintf(sSQL, "INSERT INTO %s VALUES ('%s', '%s', '%s', '%s', date('%s'))", tab.name.c_str(), str.FILENAME.c_str(), str.PATH.c_str(), str.FILETYPE.c_str(), str.DATATYPE.c_str(), str.DATE.c_str());
+    sqlite3_exec(this->db, sSQL, NULL, NULL, &sErrMsg);
+}
+
 void Database::insertFromFile(string path, struct Table table_type) {
     sqlite3_stmt * stmt;
     char * sErrMsg = 0;
@@ -244,49 +270,6 @@ void Database::insertFromFile(string path, struct Table table_type) {
         n++;
     }
     fclose (pFile);
-    sqlite3_exec(this->db, "END TRANSACTION", NULL, NULL, &sErrMsg);
-    sqlite3_finalize(stmt);
-}
-
-void Database::moveTleToTable() {
-    string name = "Satellite_";
-    string sqlInsert;
-    string sqlDelete;
-    string where;
-    
-    sqlite3_stmt * stmt;
-    char * sErrMsg = 0;
-    const char * tail = 0;
-    
-    sqlite3_exec(this->db, "BEGIN TRANSACTION", NULL, NULL, &sErrMsg);
-    vector<vector<string>> * results = this->selectStatement("SELECT DISTINCT NORAD_CAT_ID FROM TLE;");
-    for (vector<vector<string>>::iterator i = results->begin(); i!= results->end(); ++i) {
-        Table * T = new Table;
-        T->name = name;
-        T->name.append(i->begin()[0]);
-        T->type = TableTypes::TLE;
-        this->initialiseTLETable(*T);
-        sqlInsert = "INSERT INTO ";
-        sqlDelete = "DELETE FROM TLE ";
-        where = " WHERE NORAD_CAT_ID = ";
-        where.append(i->begin()[0]);
-        where.append(";");
-        
-        sqlInsert.append(T->name);
-        sqlInsert.append(" SELECT * FROM TLE");
-        sqlInsert.append(where);
-        
-        sqlDelete.append(where);
-        
-        sqlite3_prepare_v2(this->db, sqlInsert.c_str(), BUFFER_SIZE, &stmt, &tail);
-        sqlite3_step(stmt);
-        sqlite3_clear_bindings(stmt);
-        sqlite3_reset(stmt);
-        sqlite3_prepare_v2(this->db, sqlDelete.c_str(), BUFFER_SIZE, &stmt, &tail);
-        sqlite3_step(stmt);
-        sqlite3_clear_bindings(stmt);
-        sqlite3_reset(stmt);
-    }
     sqlite3_exec(this->db, "END TRANSACTION", NULL, NULL, &sErrMsg);
     sqlite3_finalize(stmt);
 }
@@ -361,3 +344,9 @@ const string TableTypes::SATCAT_DEBUT = "SATCAT_DEBUT";
 const string TableTypes::DECAY = "DECAY";
 const string TableTypes::TIP = "TIP";
 const string TableTypes::ANNOUNCEMENT = "ANNOUNCEMENT";
+const string TableTypes::FILES = "FILES";
+
+
+const string DataTypes::TLE = "TLE";
+const string DataTypes::HISTORICAL_TLE = "HISTORICAL_TLE";
+const string DataTypes::SATCAT = "SATCAT";

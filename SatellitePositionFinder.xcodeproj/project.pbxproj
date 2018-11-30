@@ -28,7 +28,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		4F79DB6021AE1CD800C5C7C1 /* Satellites_3 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Satellites_3; sourceTree = BUILT_PRODUCTS_DIR; };
+		4F79DB6021AE1CD800C5C7C1 /* SatellitePositionFinder */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = SatellitePositionFinder; sourceTree = BUILT_PRODUCTS_DIR; };
 		4F79DB6321AE1CD800C5C7C1 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		4F79DB6A21AE1CEF00C5C7C1 /* util.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = util.cpp; sourceTree = "<group>"; };
 		4F79DB6B21AE1CEF00C5C7C1 /* util.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = util.hpp; sourceTree = "<group>"; };
@@ -58,7 +58,7 @@
 		4F79DB5721AE1CD800C5C7C1 = {
 			isa = PBXGroup;
 			children = (
-				4F79DB6221AE1CD800C5C7C1 /* Satellites_3 */,
+				4F79DB6221AE1CD800C5C7C1 /* SatellitePositionFinder */,
 				4F79DB6121AE1CD800C5C7C1 /* Products */,
 				4F79DB7D21AE1E0900C5C7C1 /* Frameworks */,
 			);
@@ -67,12 +67,12 @@
 		4F79DB6121AE1CD800C5C7C1 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				4F79DB6021AE1CD800C5C7C1 /* Satellites_3 */,
+				4F79DB6021AE1CD800C5C7C1 /* SatellitePositionFinder */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		4F79DB6221AE1CD800C5C7C1 /* Satellites_3 */ = {
+		4F79DB6221AE1CD800C5C7C1 /* SatellitePositionFinder */ = {
 			isa = PBXGroup;
 			children = (
 				4F79DB7621AE1D7300C5C7C1 /* SpaceTrack */,
@@ -82,7 +82,7 @@
 				4F79DB6A21AE1CEF00C5C7C1 /* util.cpp */,
 				4F79DB6B21AE1CEF00C5C7C1 /* util.hpp */,
 			);
-			path = Satellites_3;
+			path = SatellitePositionFinder;
 			sourceTree = "<group>";
 		};
 		4F79DB6D21AE1D0D00C5C7C1 /* Database */ = {
@@ -125,9 +125,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		4F79DB5F21AE1CD800C5C7C1 /* Satellites_3 */ = {
+		4F79DB5F21AE1CD800C5C7C1 /* SatellitePositionFinder */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 4F79DB6721AE1CD800C5C7C1 /* Build configuration list for PBXNativeTarget "Satellites_3" */;
+			buildConfigurationList = 4F79DB6721AE1CD800C5C7C1 /* Build configuration list for PBXNativeTarget "SatellitePositionFinder" */;
 			buildPhases = (
 				4F79DB5C21AE1CD800C5C7C1 /* Sources */,
 				4F79DB5D21AE1CD800C5C7C1 /* Frameworks */,
@@ -137,9 +137,9 @@
 			);
 			dependencies = (
 			);
-			name = Satellites_3;
+			name = SatellitePositionFinder;
 			productName = Satellites_3;
-			productReference = 4F79DB6021AE1CD800C5C7C1 /* Satellites_3 */;
+			productReference = 4F79DB6021AE1CD800C5C7C1 /* SatellitePositionFinder */;
 			productType = "com.apple.product-type.tool";
 		};
 /* End PBXNativeTarget section */
@@ -156,7 +156,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 4F79DB5B21AE1CD800C5C7C1 /* Build configuration list for PBXProject "Satellites_3" */;
+			buildConfigurationList = 4F79DB5B21AE1CD800C5C7C1 /* Build configuration list for PBXProject "SatellitePositionFinder" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -168,7 +168,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				4F79DB5F21AE1CD800C5C7C1 /* Satellites_3 */,
+				4F79DB5F21AE1CD800C5C7C1 /* SatellitePositionFinder */,
 			);
 		};
 /* End PBXProject section */
@@ -325,7 +325,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		4F79DB5B21AE1CD800C5C7C1 /* Build configuration list for PBXProject "Satellites_3" */ = {
+		4F79DB5B21AE1CD800C5C7C1 /* Build configuration list for PBXProject "SatellitePositionFinder" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				4F79DB6521AE1CD800C5C7C1 /* Debug */,
@@ -334,7 +334,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		4F79DB6721AE1CD800C5C7C1 /* Build configuration list for PBXNativeTarget "Satellites_3" */ = {
+		4F79DB6721AE1CD800C5C7C1 /* Build configuration list for PBXNativeTarget "SatellitePositionFinder" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				4F79DB6821AE1CD800C5C7C1 /* Debug */,

@@ -24,6 +24,20 @@ using namespace std;
 
 typedef vector<tuple<string, string>> vector_tuple;
 
+struct FileInsertStatement {
+    string FILENAME;
+    string PATH;
+    string FILETYPE;
+    string DATATYPE;
+    string DATE;
+};
+
+struct DataTypes {
+    static const string TLE;
+    static const string HISTORICAL_TLE;
+    static const string SATCAT;
+};
+
 struct TableTypes {
     static const string TLE;
     static const string TLE_LATEST;
@@ -37,6 +51,7 @@ struct TableTypes {
     static const string DECAY;
     static const string TIP;
     static const string ANNOUNCEMENT;
+    static const string FILES;
 };
 
 struct Table {
@@ -47,6 +62,7 @@ struct Table {
 struct Tables {
     Table TLE {"TLE", TableTypes::TLE};
     Table SATCAT{"SATCAT", TableTypes::SATCAT};
+    Table FILES{"FILES", TableTypes::FILES};
     vector<tuple<string, Table>> Satelites;
 };
 
@@ -74,16 +90,16 @@ public:
 
 class Database {
 public:
-    Database(const char *);
+    Database(const char *, bool);
     ~Database(void);
     Tables T;
     void select(const char *);
     void createTable(PreparedTable*);
     void insertFromFile(string, struct Table);
+    void insertFromString(struct FileInsertStatement, struct Table);
     void printResults(vector<vector<string>>*);
     std::vector<std::vector<std::string> > * selectStatement(string);
     sqlite3 *db;
-    void moveTleToTable();
 private:
     char *zErrMsg = 0;
     int rc;
@@ -94,6 +110,7 @@ private:
     void selectStatement(char *);
     void iniitialiseSATCATTable(Table);
     void initialiseTLETable(Table);
+    void initialiseDownloadsTable(Table);
     vector_tuple getTableColumns(string);
     
 };

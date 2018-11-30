@@ -1,4 +1,5 @@
 #include <iostream>
+#include <sys/stat.h>
 #include <stdio.h>
 #include <string.h>
 #include <fstream>
@@ -43,7 +44,11 @@ namespace {
      o.close();
  }
  
- 
+inline bool file_exists (const std::string& name) {
+    struct stat buffer;
+    return (stat (name.c_str(), &buffer) == 0);
+}
+
  void getHistoricalTLEData(SpaceTrackConn* c, string path_file, string start, string end) {
      auto start_clock = std::chrono::high_resolution_clock::now();
      SpaceTrackQuery *q = new SpaceTrackQuery();
@@ -88,13 +93,31 @@ namespace {
      std::chrono::duration<double> elapsed_save_to_file = finish - start;
      std::cout << "Save data to file: " << elapsed_save_to_file.count() << " s\n";
  }
- 
- #define InterestedSatCat "SATCAT_Example.csv"
- 
- static void getTLEData(SpaceTrackConn &c) {
+
+static void testSelectStatement(bool printResults, const std::string &sqlStatement, Database *test) {
+    std::chrono::steady_clock::time_point begin;
+    std::chrono::steady_clock::time_point end;
+    begin = std::chrono::steady_clock::now();
+    vector<vector<string>> * results = test->selectStatement(sqlStatement);
+    end = std::chrono::steady_clock::now();
+    std::cout << "Time difference = " << std::chrono::duration_cast<std::chrono::seconds> (end - begin).count() << "seconds" << std::endl;
+    if (printResults)
+        test->printResults(results);
+}
+
+unsigned long existsSelectStatement(const std::string &sqlStatement, Database *db) {
+    vector<vector<string>> * results = db->selectStatement(sqlStatement);
+    return strtoul(results->begin()->begin()->c_str(), NULL, 0);
+}
+
+
+ static void getTLEData(string type, string path, Database * db, SpaceTrackConn &c) {
      char startDate[100];
      char endDate[100];
-     
+     struct FileInsertStatement FIS;
+     string name, path_file, sqlStatement, start, end;
+     unsigned long fileExistInDatabase;
+     bool fileExists;
      // Download Date
      struct tm dDate = {0};
      strptime("2017-01-01", "%Y-%m-%dT", &dDate);
@@ -106,18 +129,38 @@ namespace {
      time (&timeNow);
 
      while (downloadDate < timeNow) {
+         cout << "Updating Historical TLE records." << endl;
          strftime(startDate, sizeof(startDate), "%Y-%m-%d", &dDate);
          dDate.tm_mday += 1;
          mktime(&dDate);
          downloadDate = mktime(&dDate);
          strftime(endDate, sizeof(endDate), "%Y-%m-%d", &dDate);
-         string start = string(startDate);
-         string end = string(endDate);
-         string path_file = "Historical_TLE_Data/test_";
-         path_file.append(start);
-         path_file.append(".csv");
-         getHistoricalTLEData(&c, path_file, startDate, endDate);
+         start = string(startDate);
+         name = type;
+         name.append("_");
+         name.append(start);
+         name.append(".csv");
+         path_file = path;
+         path_file.append(name);
+         FIS.FILENAME = name;
+         FIS.PATH = path;
+         FIS.DATE = start;
+         FIS.FILETYPE = "csv";
+         FIS.DATATYPE = type;
+         sqlStatement = "SELECT COUNT(*) FROM FILES WHERE FILENAME = '";
+         sqlStatement.append(name);
+         sqlStatement.append("';");
+         fileExistInDatabase = existsSelectStatement(sqlStatement, db);
+         fileExists = file_exists(path_file);
+         if ((fileExistInDatabase == 0) and (fileExists == false)) {
+             getHistoricalTLEData(&c, path_file, startDate, endDate);
+             db->insertFromString(FIS, db->T.FILES);
+         } else if ((fileExistInDatabase == 0) and (fileExists == true)) {
+             db->insertFromString(FIS, db->T.FILES);
+         } else if (fileExistInDatabase != 0) {
+         }
      }
+     cout << "Historical records updated." << endl;
  }
 
 static void importFromDirectory(Database *test) {
@@ -143,29 +186,16 @@ static void importFromDirectory(Database *test) {
     std::cout << "All files imported: " << std::chrono::duration_cast<std::chrono::seconds> (end - begin).count() << "seconds" << std::endl;
 }
 
-static void testSelectStatement(bool printResults, const std::string &sqlStatement, Database *test) {
-    std::chrono::steady_clock::time_point begin;
-    std::chrono::steady_clock::time_point end;
-    begin = std::chrono::steady_clock::now();
-    vector<vector<string>> * results = test->selectStatement(sqlStatement);
-    end = std::chrono::steady_clock::now();
-    std::cout << "Time difference = " << std::chrono::duration_cast<std::chrono::seconds> (end - begin).count() << "seconds" << std::endl;
-    if (printResults)
-        test->printResults(results);
-}
+
 
 int main(int argc, char *argv[])
 {
+    
     SpaceTrackConn c("h2807809@nwytg.net", "z5nfI0sgeHob3t0PZF2uP364inQe8", "https://www.space-track.org/ajaxauth/login");
-    getTLEData(c);
     
-    //interestedSatellite(&c, InterestedSatCat);
-    
-    // Database
-    Database* test = new Database("TEST.db");
-    //test->insertFromFile(InterestedSatCat, test->T.SATCAT);
-    //test->insertFromFile("TLE_Example2.csv", test->T.TLE);
-    //importFromDirectory(test);
+    Database* test = new Database("SatelliteData.db", false);
+    getTLEData("HISTORICAL_TLE", "Historical_TLE_Data/", test, c);
+    importFromDirectory(test);
     
     /*
     string sqlStatement = "CREATE INDEX IF NOT EXISTS NCID on TLE (NORAD_CAT_ID);";
@@ -174,13 +204,12 @@ int main(int argc, char *argv[])
     end = std::chrono::steady_clock::now();
     std::cout << "Time difference = " << std::chrono::duration_cast<std::chrono::seconds> (end - begin).count() << "seconds" << std::endl;
     test->printResults(test->selectStatement(sqlStatement));
-
     */
     string sqlStatement = "SELECT n.* FROM TLE n INNER JOIN ( SELECT NORAD_CAT_ID, MAX(EPOCH) as EPOCH FROM TLE WHERE EPOCH < date('2018-06-02') AND OBJECT_TYPE = 'PAYLOAD' GROUP BY NORAD_CAT_ID ) as max USING (NORAD_CAT_ID, EPOCH);";
-    testSelectStatement(false, sqlStatement, test);
+    //testSelectStatement(false, sqlStatement, test);
     
 
-    sqlStatement = "SELECT COUNT(*) FROM TLE;";
-    testSelectStatement(true, sqlStatement, test);
+    sqlStatement = "SELECT * FROM FILES;";
+    //testSelectStatement(true, sqlStatement, test);
     return 0;
 }
