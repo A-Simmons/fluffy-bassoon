@@ -34,7 +34,6 @@
 		4F79DB6B21AE1CEF00C5C7C1 /* util.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = util.hpp; sourceTree = "<group>"; };
 		4F79DB7121AE1D3D00C5C7C1 /* database_sqlite3.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = database_sqlite3.cpp; sourceTree = "<group>"; };
 		4F79DB7221AE1D3D00C5C7C1 /* database_sqlite3.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = database_sqlite3.hpp; sourceTree = "<group>"; };
-		4F79DB7521AE1D6800C5C7C1 /* json.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = json.h; sourceTree = "<group>"; };
 		4F79DB7721AE1D8C00C5C7C1 /* spacetrackquery.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = spacetrackquery.cpp; sourceTree = "<group>"; };
 		4F79DB7821AE1D8C00C5C7C1 /* spacetrackquery.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = spacetrackquery.hpp; sourceTree = "<group>"; };
 		4F79DB7A21AE1DA900C5C7C1 /* spacetrack.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = spacetrack.cpp; sourceTree = "<group>"; };
@@ -76,7 +75,6 @@
 			isa = PBXGroup;
 			children = (
 				4F79DB7621AE1D7300C5C7C1 /* SpaceTrack */,
-				4F79DB7421AE1D4F00C5C7C1 /* nlohmann */,
 				4F79DB6D21AE1D0D00C5C7C1 /* Database */,
 				4F79DB6321AE1CD800C5C7C1 /* main.cpp */,
 				4F79DB6A21AE1CEF00C5C7C1 /* util.cpp */,
@@ -92,14 +90,6 @@
 				4F79DB7221AE1D3D00C5C7C1 /* database_sqlite3.hpp */,
 			);
 			path = Database;
-			sourceTree = "<group>";
-		};
-		4F79DB7421AE1D4F00C5C7C1 /* nlohmann */ = {
-			isa = PBXGroup;
-			children = (
-				4F79DB7521AE1D6800C5C7C1 /* json.h */,
-			);
-			path = nlohmann;
 			sourceTree = "<group>";
 		};
 		4F79DB7621AE1D7300C5C7C1 /* SpaceTrack */ = {

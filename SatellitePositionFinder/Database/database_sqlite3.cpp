@@ -136,7 +136,7 @@ std::vector<std::vector<std::string> > * Database::selectStatement(string sqlSta
     std::vector< std::vector< std::string > > * result = new std::vector< std::vector< std::string > >;
     std::vector< std::string > rowResult;
     sqlite3_stmt * stmt;
-    sqlite3_prepare(this->db, sqlStatement.c_str(), -1, &stmt, NULL);//preparing the statement
+    sqlite3_prepare_v2(this->db, sqlStatement.c_str(), -1, &stmt, NULL); //preparing the statement
     sqlite3_step( stmt );//executing the statement
     string text;
     while( sqlite3_column_text( stmt, 0 ) )

@@ -201,7 +201,6 @@ bool SpaceTrackConn::checkFields(SpaceTrackQuery* q) {
     return result;
 }
 
-// args is a vector of tuples which contain (string FieldName, string FieldValue) for a query to space-track.org
 string SpaceTrackConn::getData(SpaceTrackQuery* q) {
     if (this->checkFields(q)) {
         cout << "Something bad happened\n";

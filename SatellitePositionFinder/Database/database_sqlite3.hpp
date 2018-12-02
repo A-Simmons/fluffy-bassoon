@@ -66,8 +66,6 @@ struct Tables {
     vector<tuple<string, Table>> Satelites;
 };
 
-
-
 class PreparedTable {
 public:
     PreparedTable();
