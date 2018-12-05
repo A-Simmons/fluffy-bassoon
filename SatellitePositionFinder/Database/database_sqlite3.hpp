@@ -18,7 +18,7 @@
 #include <string.h>
 #include <vector>
 #include <algorithm>
-#include "../util.hpp"
+#include "../util.cpp"
 
 using namespace std;
 

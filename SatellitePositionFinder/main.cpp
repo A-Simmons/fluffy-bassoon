@@ -6,9 +6,9 @@
 #include <sstream>
 #include <ctime>
 #include <chrono>
-#include "SpaceTrack/spacetrack.hpp"
-#include "SpaceTrack/spacetrackquery.hpp"
-#include "Database/database_sqlite3.hpp"
+#include "SpaceTrack/spacetrack.cpp"
+#include "SpaceTrack/spacetrackquery.cpp"
+#include "Database/database_sqlite3.cpp"
 #include <dirent.h>
 #include <cstring>
 #include <iostream>
