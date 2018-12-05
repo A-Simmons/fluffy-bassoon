@@ -191,8 +191,8 @@ int main(int argc, char *argv[])
     SpaceTrackConn c("h2807809@nwytg.net", "z5nfI0sgeHob3t0PZF2uP364inQe8", "https://www.space-track.org/ajaxauth/login");
     
     Database* test = new Database("SatelliteData.db", false);
-    //getTLEData("HISTORICAL_TLE", "Historical_TLE_Data/", test, c);
-    //importFromDirectory(test);
+    getTLEData("HISTORICAL_TLE", "Historical_TLE_Data/", test, c);
+    importFromDirectory(test);
     string sqlStatement;
     
     sqlStatement = "CREATE INDEX IF NOT EXISTS NCID on TLE (NORAD_CAT_ID);";
