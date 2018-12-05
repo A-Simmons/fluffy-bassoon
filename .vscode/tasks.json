@@ -1,0 +1,44 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "echo",
+            "type": "shell",
+            "command": "g++",
+            "args": [
+                "-std=c++11",
+                "-lcurl",
+                "-lsqlite3",
+                "-g",
+                "fluffy-bassoon/SatellitePositionFinder/main.cpp"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "build & run",
+            "type": "shell",
+            "command": "g++",
+            "args": [
+                "-std=c++11",
+                "-lcurl",
+                "-lsqlite3",
+                "-g",
+                "fluffy-bassoon/main.cpp",
+                "-o",
+                "main.sh"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": [
+                "$gcc"
+            ]
+        }
+    ]
+}
