@@ -30,6 +30,7 @@ struct FileInsertStatement {
     string FILETYPE;
     string DATATYPE;
     string DATE;
+    bool IMPORTED;
 };
 
 struct DataTypes {

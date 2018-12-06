@@ -227,13 +227,14 @@ void Database::initialiseDownloadsTable(Table T) {
     pTable.appendColumn("FILETYPE", "TEXT");
     pTable.appendColumn("DATATYPE", "DATETIME");
     pTable.appendColumn("DATE", "DATE");
+    pTable.appendColumn("IMPORTED", "BOOL");
     this->createTable(&pTable);
 }
 
 void Database::insertFromString(struct FileInsertStatement str, struct Table tab) {
     char * sErrMsg = 0;
     char sSQL [BUFFER_SIZE] = "\0";
-    sprintf(sSQL, "INSERT INTO %s VALUES ('%s', '%s', '%s', '%s', date('%s'))", tab.name.c_str(), str.FILENAME.c_str(), str.PATH.c_str(), str.FILETYPE.c_str(), str.DATATYPE.c_str(), str.DATE.c_str());
+    sprintf(sSQL, "INSERT INTO %s VALUES ('%s', '%s', '%s', '%s', date('%s'), '%d')", tab.name.c_str(), str.FILENAME.c_str(), str.PATH.c_str(), str.FILETYPE.c_str(), str.DATATYPE.c_str(), str.DATE.c_str(), str.IMPORTED ? 1 : 0);
     sqlite3_exec(this->db, sSQL, NULL, NULL, &sErrMsg);
 }
 

@@ -18,7 +18,6 @@
 #define StartDownloadDate = "2017-01-01";
 //#include <filesystem>
 using namespace std;
-
 namespace {
     std::vector<std::string> GetDirectoryFiles(const std::string& dir) {
         std::vector<std::string> files;
@@ -108,7 +107,6 @@ unsigned long existsSelectStatement(const std::string &sqlStatement, Database *d
     return strtoul(results->begin()->begin()->c_str(), NULL, 0);
 }
 
-
  static void getTLEData(string type, string path, Database * db, SpaceTrackConn &c) {
      char startDate[100];
      char endDate[100];
@@ -145,6 +143,7 @@ unsigned long existsSelectStatement(const std::string &sqlStatement, Database *d
          FIS.DATE = start;
          FIS.FILETYPE = "csv";
          FIS.DATATYPE = type;
+         FIS.IMPORTED = false;
          sqlStatement = "SELECT COUNT(*) FROM FILES WHERE FILENAME = '";
          sqlStatement.append(name);
          sqlStatement.append("';");
@@ -165,26 +164,37 @@ static void importFromDirectory(Database *test) {
     std::string path = "/Historical_TLE_Data/";
     //getTLEData(c);
     const auto& directory_path = std::string("./Historical_TLE_Data/");
+    string sql = "SELECT IMPORTED FROM FILES WHERE FILENAME='";
+    string ss;
     vector<string> files = GetDirectoryFiles(directory_path);
     sort(files.begin(), files.end());
     string dir_path = "./Historical_TLE_Data";
-    
     std::chrono::steady_clock::time_point begin;
     std::chrono::steady_clock::time_point end;
     begin = std::chrono::steady_clock::now();
     for (const auto& file : files) {
         if ((file == ".") or (file == "..") or (file == ".DS_Store"))
-            continue;
-        path = directory_path;
-        path.append(file);
-        std::cout << "Importing: " << file << std::endl;
-        test->insertFromFile(path, test->T.TLE);
+            continue;        
+        ss = sql;
+        ss.append(file);
+        ss.append("';");
+        vector<vector<string>> * result = test->selectStatement(ss);
+        if (strcmp(result->begin()->begin()->c_str(),"0")==0) {
+            path = directory_path;
+            path.append(file);
+            std::cout << "Importing: " << file << std::endl;
+            test->insertFromFile(path, test->T.TLE);
+            ss = "UPDATE FILES SET IMPORTED=1 WHERE FILENAME='";
+            ss.append(file);
+            ss.append("';");
+            test->selectStatement(ss);
+        } else {
+            std::cout << "Already Imported: " << file << std::endl;
+        }
     }
     end = std::chrono::steady_clock::now();
     std::cout << "All files imported: " << std::chrono::duration_cast<std::chrono::seconds> (end - begin).count() << "seconds" << std::endl;
 }
-
-
 
 int main(int argc, char *argv[])
 {
@@ -194,7 +204,10 @@ int main(int argc, char *argv[])
     getTLEData("HISTORICAL_TLE", "Historical_TLE_Data/", test, c);
     importFromDirectory(test);
     string sqlStatement;
-    
+
+    sqlStatement = "SELECT COUNT(*) FROM TLE;";
+    testSelectStatement(false, sqlStatement, test);
+
     sqlStatement = "CREATE INDEX IF NOT EXISTS NCID on TLE (NORAD_CAT_ID);";
     testSelectStatement(false, sqlStatement, test);
     
